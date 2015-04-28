@@ -2,7 +2,7 @@ FROM tutum/curl:trusty
 
 MAINTAINER "Martin Westergaard Lassen <martin@mwl.dk>"
 
-ENV ELASTIC_SEARCH="elasticsearch"
+ENV ELASTIC_SEARCH_URL="http://elasticsearch:9200"
 
 RUN curl -s http://www.elastic.co/guide/en/kibana/3.0/snippets/shakespeare.json > shakespeare.json
 RUN echo '{ \
@@ -18,5 +18,5 @@ RUN echo '{ \
  } \
 }' > setup.json
 
-CMD sh -c "curl -XPUT -s -H'Content-Type: application/json' --data-binary @setup.json http://${ELASTIC_SEARCH}:9200/shakespeare && sleep 3 && \
-           curl -XPUT -s -H'Content-Type: application/json' --data-binary @shakespeare.json http://${ELASTIC_SEARCH}:9200/_bulk > /dev/null"
+CMD sh -c "curl -XPUT -s -H'Content-Type: application/json' --data-binary @setup.json ${ELASTIC_SEARCH_URL}/shakespeare && sleep 3 && \
+           curl -XPUT -s -H'Content-Type: application/json' --data-binary @shakespeare.json ${ELASTIC_SEARCH}/_bulk > /dev/null"
